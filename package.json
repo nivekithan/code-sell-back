@@ -1,0 +1,26 @@
+{
+  "name": "code-sell-back",
+  "version": "1.0.0",
+  "description": "",
+  "main": "build/index.js",
+  "scripts": {
+    "esbuild": "node config/esbuild.js",
+    "server": "nodemon --watch build build/index.js"
+  },
+  "keywords": [],
+  "author": {
+    "name": "Nivekithan S",
+    "email": "nivekithan363@gmail.com",
+    "url": "https://www.polywork.com/nivekithan"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "fastify": "^3.18.1"
+  },
+  "devDependencies": {
+    "@types/node": "^16.0.1",
+    "esbuild": "^0.12.15",
+    "nodemon": "^2.0.10",
+    "typescript": "^4.3.5"
+  }
+}
