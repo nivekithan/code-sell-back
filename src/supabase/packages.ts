@@ -1,7 +1,8 @@
-import { supabaseClient } from "./supabase.js";
+import { supabaseClient, SUPABASE_CONSTANTS } from "./supabase.js";
 import { PostgrestResponse } from "@supabase/supabase-js";
+import { ENV } from "../env.js";
 
-const packagesTable = "packages";
+const packagesTable = SUPABASE_CONSTANTS.PACKAGES_STORED_TABLE;
 
 export type PackageData<Name extends string, Version extends string> = {
   id: number;
@@ -54,9 +55,6 @@ export const getPackageByNameAndVer = async <
     .eq("name", packageName)
     .eq("version", packageVer);
 
-    console.log(packageVer)
-  console.log(res)
-
   if (res.data && res.data.length === 0) {
     return {
       data: null,
@@ -96,4 +94,54 @@ export const getPackageByNameAndVer = async <
   }
 
   return res;
+};
+
+export const uploadPackagesByNameAndVer = async <
+  Name extends string,
+  Version extends string
+>(
+  packageName: Name,
+  packageVer: Version,
+  tarballUrl: string
+) => {
+  const packageRootUrl = encodeURIComponent(`${ENV.DOMAIN_URL}/${packageName}`);
+  const packageVersionUrl = encodeURIComponent(
+    `${ENV.DOMAIN_URL}/${packageName}/${packageVer}`
+  );
+
+  const res = await supabaseClient
+    .from<PackageData<Name, Version>>(packagesTable)
+    .insert([
+      {
+        name: packageName,
+        version: packageVer,
+        package_root_url: packageRootUrl,
+        package_version_url: packageVersionUrl,
+        tarball_url: tarballUrl,
+      },
+    ]);
+
+  console.log(res);
+
+  return res;
+};
+
+export const isPackagePresentWithNameAndVer = async (
+  packageName: string,
+  packageVer: string
+) => {
+  try {
+    const res = await supabaseClient
+      .from<PackageData<string, string>>(packagesTable)
+      .select("id")
+      .eq("name", packageName)
+      .eq("version", packageVer);
+
+    if (res.body && res.body.length > 0) {
+      return true;
+    }
+    return false;
+  } catch (err) {
+    return false;
+  }
 };

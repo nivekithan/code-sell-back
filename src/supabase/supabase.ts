@@ -9,4 +9,5 @@ export const supabaseClient = createClient(
 export const SUPABASE_CONSTANTS = {
   TARBALL_BUCKET: "tarball",
   STORAGE_URL: `${ENV.SUPABASE_DB_URL}/storage/v1`,
+  PACKAGES_STORED_TABLE: "packages",
 };

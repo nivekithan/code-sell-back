@@ -1,4 +1,4 @@
-import { PackageData } from "./supabase/utils";
+import { PackageData } from "./supabase/packages";
 import { PackageRootObject, PackageVersionObject } from "./types/package";
 
 // Full Name of the function ConvertPackageDataToPackageRoot
