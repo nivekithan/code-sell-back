@@ -1,6 +1,9 @@
 import { FastifyInstance } from "fastify";
-import { getPackage } from "../../supabase/utils.js";
-import { convertPDataToPRoot } from "../../utils.js";
+import {
+  getPackageByNameAndVer,
+  getPackagesByName,
+} from "../../supabase/utils.js";
+import { convertPDataToPRoot, convertPDataToPVersion } from "../../utils.js";
 
 const routes = async (fastify: FastifyInstance) => {
   type AParams = {
@@ -13,17 +16,43 @@ const routes = async (fastify: FastifyInstance) => {
 
   fastify.get<AGeneric>("/:package_name", async (req, reply) => {
     const packageName = decodeURIComponent(req.params.package_name);
-    const res = await getPackage(packageName);
 
-    if (res.data) {
-      return convertPDataToPRoot(res.data);
+    const packagesInfo = await getPackagesByName(packageName);
+
+    if (packagesInfo.data) {
+      return convertPDataToPRoot(packagesInfo.data);
     } else {
-      return reply.code(res.status).send({ error: res.error.message });
+      return reply
+        .code(packagesInfo.status)
+        .send({ error: packagesInfo.error.message });
     }
   });
 
-  fastify.get("/:packageName/:version", async () => {
-    return "Not Implemented";
+  type BParams = {
+    package_name: string;
+    version: string;
+  };
+
+  type BGeneric = {
+    Params: BParams;
+  };
+
+  fastify.get<BGeneric>("/:package_name/:version", async (req, reply) => {
+    const packageName = decodeURIComponent(req.params.package_name);
+    const packageVersion = decodeURIComponent(req.params.version);
+
+    const packageInfo = await getPackageByNameAndVer(
+      packageName,
+      packageVersion
+    );
+
+    if (packageInfo.data) {
+      return convertPDataToPVersion(packageInfo.data);
+    } else {
+      return reply
+        .code(packageInfo.status)
+        .send({ error: packageInfo.error.message });
+    }
   });
 
   type TParams = {
@@ -63,7 +92,7 @@ const routes = async (fastify: FastifyInstance) => {
         });
       }
 
-      await getPackage(nameOfThePackage);
+      await getPackagesByName(nameOfThePackage);
     }
   );
 };
