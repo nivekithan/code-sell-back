@@ -1,7 +1,9 @@
-const esbuild = require("esbuild");
-const fs = require("fs/promises");
-const path = require("path");
+import esbuild from "esbuild";
+import fs from "fs/promises";
+import path from "path";
+import { fileURLToPath } from "url";
 
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const cwd = path.resolve(__dirname, "..");
 const srcDir = path.resolve(cwd, "src");
 const buildDir = path.resolve(cwd, "build");
@@ -45,15 +47,14 @@ const generateJsFiles = async () => {
     entryPoints: allFileNames,
     outdir: "build",
     outbase: "src",
-    format: "cjs",
     sourcemap: true,
     watch: {
       onRebuild(err, res) {
         if (err) {
-          console.log("Esbuild Build Failed: " + err);
+          console.log("esbuild Build Failed: " + err);
           return;
         } else {
-          console.log("Esbuild Build Success");
+          console.log("esbuild Build Success");
         }
       },
     },

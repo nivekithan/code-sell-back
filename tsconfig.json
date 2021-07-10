@@ -3,7 +3,6 @@
     "allowJs": true,
     "allowSyntheticDefaultImports": true,
     "strict": true,
-    "baseUrl": ".",
     "esModuleInterop": true,
     "skipLibCheck": true,
     "noImplicitAny": true,

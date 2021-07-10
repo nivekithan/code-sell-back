@@ -1,0 +1,21 @@
+GET http://localhost:5000/ HTTP/1.1
+Content-Type: application/json
+
+### 
+
+POST http://localhost:5000/ HTTP/1.1
+
+###
+
+GET http://localhost:5000/get HTTP/1.1
+Content-Type: application/json
+
+###
+
+GET http://localhost:5000/%40test%2Ftest HTTP/1.1
+Content-Type: application/json
+
+### 
+
+GET http://localhost:5000/%40unknown%2Funknown HTTP/1.1
+Content-Type: application/json
